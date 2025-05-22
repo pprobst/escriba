@@ -22,8 +22,8 @@ class Settings(BaseSettings):
     """Application settings."""
 
     # API configuration
-    app_title: str = "Transcriber API"
-    app_description: str = "Audio Transcription and Text Generation Service"
+    app_title: str = "Escriba"
+    app_description: str = "Audio Transcription Service"
     app_version: str = "1.0.0"
 
     # Google API settings
@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     groq_api_key: str = os.environ.get("GROQ_API_KEY", "")
 
     # Prompt template defaults
-    default_template_name: str = "empty.jinja2"
+    default_template_name: str = "transcription.jinja2"
     default_language: str = ""
     default_context: str = "General"
     no_symbols: bool = (

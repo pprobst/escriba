@@ -1,11 +1,9 @@
 """External service integrations."""
 
-from .gemini import gemini_service
 from .prompt_templates import prompt_template_service
-from .groq import transcribe_audio_groq
+from .transcription_service import get_transcription_service
 
 __all__ = [
-    "gemini_service",
     "prompt_template_service",
-    "transcribe_audio_groq",
+    "get_transcription_service",
 ]

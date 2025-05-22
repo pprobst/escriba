@@ -8,8 +8,7 @@ from app.api.models import GenerationRequest, TemplateInfo
 from app.core.logger import log
 from app.core.config import settings
 from app.services import (
-    gemini_service,
-    transcribe_audio_groq,
+    get_transcription_service,
     prompt_template_service,
 )
 
@@ -40,10 +39,7 @@ async def generate_stream(request: GenerationRequest, req: Request):
         )
 
     # Validate that audio data is provided when using the transcription template or a whisper model
-    if (
-        request.template_name == "transcription.jinja2"
-        or "whisper" in request.model_name.lower()
-    ) and not request.audio_base64:
+    if request.template_name == "transcription.jinja2" and not request.audio_base64:
         log.warning("Transcription template or Whisper model used without audio data")
         raise HTTPException(
             status_code=422,
@@ -71,58 +67,23 @@ async def generate_stream(request: GenerationRequest, req: Request):
 
     async def generate():
         try:
-            initial_prompt_for_groq = None
-            # Construct initial_prompt for Groq specifically from context and previous_context, since the prompt length must be 896 characters or fewer.
-            if (
-                "whisper" in request.model_name.lower()
-            ):  # Only construct this for Whisper/Groq
-                prompt_parts = []
-                if template_vars.get("context"):
-                    prompt_parts.append(str(template_vars["context"]))
-                if template_vars.get("previous_context"):
-                    prompt_parts.append(str(template_vars["previous_context"]))
+            # Get the appropriate transcription service based on model name
+            transcription_service = get_transcription_service(request.model_name)
 
-                if prompt_parts:
-                    initial_prompt_for_groq = " ".join(prompt_parts)
-                    log.info(
-                        f"Constructed initial prompt for Groq from context/previous_context: {initial_prompt_for_groq[:200]}..."
-                    )
-                else:
-                    log.info(
-                        "No context or previous_context found for Groq initial prompt."
-                    )
+            # Use the transcription service to process the audio
+            log.info(f"Transcribing audio with model: {request.model_name}")
 
-            if "whisper" in request.model_name.lower():
-                if not request.audio_base64:
-                    log.error(
-                        "Whisper model called without audio data in generate function"
-                    )
-                    yield "Error: Audio data is required for Whisper models."
-                    return
+            async for chunk in transcription_service.transcribe(
+                audio_base64=request.audio_base64,
+                model_id=request.model_name,
+                template_name=request.template_name,
+                template_vars=template_vars,
+            ):
+                if await req.is_disconnected():
+                    log.info("Client disconnected during streaming")
+                    break
+                yield chunk
 
-                log.info(
-                    f"Transcribing audio with Groq Whisper model: {request.model_name}"
-                )
-                transcription = await transcribe_audio_groq(
-                    audio_base64=request.audio_base64,
-                    initial_prompt=initial_prompt_for_groq,  # Pass constructed prompt
-                    language=template_vars.get("language"),
-                )
-                yield transcription
-            else:
-                # For Gemini, the stream_response method handles template rendering internally
-                log.info(f"Generating text with Gemini model: {request.model_name}")
-                stream = gemini_service.stream_response(
-                    audio_base64=request.audio_base64,
-                    model_id=request.model_name,
-                    template_name=request.template_name,
-                    template_vars=template_vars,
-                )
-                async for chunk in stream:
-                    if await req.is_disconnected():
-                        log.info("Client disconnected during streaming")
-                        break
-                    yield chunk
         except (
             HTTPException
         ) as http_exc:  # Re-raise HTTPExceptions to be handled by FastAPI
@@ -179,7 +140,7 @@ async def root():
     """API information endpoint."""
     log.debug("Root endpoint accessed")
     return {
-        "message": "Transcriber API Service",
+        "message": "Escriba - a transcription API",
         "documentation": "/docs",
         "endpoints": {
             "generate": "/generate/",

@@ -36,26 +36,10 @@ Audio transcription API.
 
 ## API Endpoints
 
-- `POST /generate/`: Stream text from Gemini models. Language should be provided as a valid language code (e.g., "en", "es", "pt").
+- `POST /generate/`: Stream text from audio transcription. Supports both Gemini and Groq transcription models.
   ```json
   {
     "audio_base64": "Base64 encoded audio data",
-    "model_name": "gemini-2.5-flash-preview-05-20"
-  }
-  ```
-
-- `GET /`: API information endpoint
-
-## Examples
-
-### Transcription
-
-```bash
-AUDIO_B64=$(base64 -w 0 audio.mp3)
-curl -X POST "http://localhost:8000/generate/" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "audio_base64": "'$AUDIO_B64'", 
     "model_name": "gemini-2.5-flash-preview-05-20",
     "template_name": "transcription.jinja2",
     "template_vars": {
@@ -67,8 +51,12 @@ curl -X POST "http://localhost:8000/generate/" \
         "Preserve technical medical terms exactly as spoken"
       ]
     }
-  }'
-```
+  }
+  ```
+
+- `GET /templates/`: List all available prompt templates
+
+- `GET /`: API information endpoint
 
 ## Project Structure
 
@@ -90,10 +78,15 @@ curl -X POST "http://localhost:8000/generate/" \
 │       ├── __init__.py
 │       ├── gemini.py     # Gemini API integration
 │       ├── groq.py       # Groq API integration
-│       └── prompt_templates.py # Template handling
+│       ├── prompt_templates.py # Template handling
+│       └── transcription_service.py # Transcription service
+├── audio/                # Directory for audio samples
+├── bench/                # Benchmarking utilities
+│   └── transcribe_dataset.py # Script for benchmarking transcription
+├── datasets/             # Test datasets for benchmarking
 ├── prompts/              # Prompt templates
-│   ├── transcription.jinja2  # Transcription template
-├── streamlit_app.py      # Streamlit UI
+│   └── transcription.jinja2  # Transcription template
+├── streamlit_app.py      # Streamlit UI for testing
 ├── requirements.txt      # Production dependencies
 └── pyproject.toml        # Project configuration
 ```
