@@ -1,0 +1,25 @@
+[project]
+name = "escriba"
+version = "0.1.0"
+description = "Audio transcription API."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.12",
+    "filetype>=1.2.0",
+    "google-genai>=1.16.1",
+    "httpx>=0.28.1",
+    "jinja2>=3.1.6",
+    "pydantic>=2.11.4",
+    "pydantic-settings>=2.9.1",
+    "python-dotenv>=1.1.0",
+    "uvicorn>=0.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "streamlit>=1.45.1",
+    "jiwer>=3.1.0",
+    "pandas>=2.2.3",
+    "tqdm>=4.67.1",
+]
