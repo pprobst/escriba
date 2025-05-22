@@ -1,33 +1,10 @@
 # escriba
 Audio transcription API.
 
-## Project Structure
-
-```
-.
-├── app/                  # Main application package
-│   ├── __init__.py       # Package initialization
-│   ├── main.py           # Application entry point
-│   ├── api/              # API layer
-│   │   ├── __init__.py
-│   │   ├── endpoints.py  # API endpoint handlers
-│   │   ├── models.py     # Request/response models
-│   │   └── routes.py     # Route configuration
-│   ├── core/             # Core functionality
-│   │   ├── __init__.py
-│   │   ├── config.py     # Application settings
-│   │   └── logger.py     # Logging module
-│   └── services/         # External services
-│       ├── __init__.py
-│       ├── gemini.py     # Gemini API integration
-│       ├── groq.py       # Groq API integration
-│       └── prompt_templates.py # Template handling
-├── prompts/              # Prompt templates
-│   ├── transcription.jinja2  # Transcription template
-├── streamlit_app.py      # Streamlit UI
-├── requirements.txt      # Production dependencies
-└── pyproject.toml        # Project configuration
-```
+## Requirements
+- Python >=3.11 
+- uv
+- Google (Gemini) API key
 
 ## Setup
 
@@ -91,4 +68,32 @@ curl -X POST "http://localhost:8000/generate/" \
       ]
     }
   }'
+```
+
+## Project Structure
+
+```
+.
+├── app/                  # Main application package
+│   ├── __init__.py       # Package initialization
+│   ├── main.py           # Application entry point
+│   ├── api/              # API layer
+│   │   ├── __init__.py
+│   │   ├── endpoints.py  # API endpoint handlers
+│   │   ├── models.py     # Request/response models
+│   │   └── routes.py     # Route configuration
+│   ├── core/             # Core functionality
+│   │   ├── __init__.py
+│   │   ├── config.py     # Application settings
+│   │   └── logger.py     # Logging module
+│   └── services/         # External services
+│       ├── __init__.py
+│       ├── gemini.py     # Gemini API integration
+│       ├── groq.py       # Groq API integration
+│       └── prompt_templates.py # Template handling
+├── prompts/              # Prompt templates
+│   ├── transcription.jinja2  # Transcription template
+├── streamlit_app.py      # Streamlit UI
+├── requirements.txt      # Production dependencies
+└── pyproject.toml        # Project configuration
 ```
