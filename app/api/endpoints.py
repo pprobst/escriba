@@ -18,7 +18,7 @@ router = APIRouter()
 
 @router.post(
     "/generate/",
-    summary="Generate text or transcribe audio",
+    summary="Transcribe audio",
 )
 async def generate_stream(request: GenerationRequest, req: Request):
     """Stream generated content from a Gemini model or transcribe audio using Groq.

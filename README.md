@@ -58,6 +58,8 @@ Audio transcription API.
 
 - `GET /`: API information endpoint
 
+- `GET /docs`: OpenAPI docs
+
 ## Project Structure
 
 ```
