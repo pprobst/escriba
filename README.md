@@ -62,31 +62,29 @@ Audio transcription API.
 
 ```
 .
-├── app/                  # Main application package
-│   ├── __init__.py       # Package initialization
-│   ├── main.py           # Application entry point
-│   ├── api/              # API layer
+├── app/                             # Main application package
+│   ├── __init__.py                  # Package initialization
+│   ├── main.py                      # Application entry point
+│   ├── api/                         # API layer
 │   │   ├── __init__.py
-│   │   ├── endpoints.py  # API endpoint handlers
-│   │   ├── models.py     # Request/response models
-│   │   └── routes.py     # Route configuration
-│   ├── core/             # Core functionality
+│   │   ├── endpoints.py             # API endpoint handlers
+│   │   ├── models.py                # Request/response models
+│   │   └── routes.py                # Route configuration
+│   ├── core/                        # Core functionality
 │   │   ├── __init__.py
-│   │   ├── config.py     # Application settings
-│   │   └── logger.py     # Logging module
-│   └── services/         # External services
+│   │   ├── config.py                # Application settings
+│   │   └── logger.py                # Logging module
+│   └── services/                    # External services
 │       ├── __init__.py
-│       ├── gemini.py     # Gemini API integration
-│       ├── groq.py       # Groq API integration
-│       ├── prompt_templates.py # Template handling
+│       ├── gemini.py                # Gemini API integration
+│       ├── groq.py                  # Groq API integration
+│       ├── prompt_templates.py      # Template handling
 │       └── transcription_service.py # Transcription service
-├── audio/                # Directory for audio samples
-├── bench/                # Benchmarking utilities
-│   └── transcribe_dataset.py # Script for benchmarking transcription
-├── datasets/             # Test datasets for benchmarking
-├── prompts/              # Prompt templates
-│   └── transcription.jinja2  # Transcription template
-├── streamlit_app.py      # Streamlit UI for testing
-├── requirements.txt      # Production dependencies
-└── pyproject.toml        # Project configuration
+├── audio/                           # Directory for audio samples
+├── datasets/                        # Test datasets for benchmarking
+├── prompts/                         # Prompt templates
+│   └── transcription.jinja2         # Transcription template
+├── streamlit_app.py                 # Streamlit UI for testing
+├── requirements.txt                 # Production dependencies
+└── pyproject.toml                   # Project configuration
 ```
